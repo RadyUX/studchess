@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -34,6 +28,8 @@ model User {
   
   // Champs relatifs aux sessions
   sessions       Session[]
+
+    documents       Document[]
 }
 
  
@@ -57,3 +53,23 @@ model VerificationToken {
   @@unique([identifier, token])
 }
  
+model Document {
+  id            String   @id @default(cuid()) @map("_id") @db.ObjectId
+  title         String
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isArchived    Boolean
+  parentDocumentId String? @db.ObjectId
+  parentDocument   Document? @relation("ParentDocument", fields: [parentDocumentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children      Document[] @relation("ParentDocument")
+  content       String?
+  coverImage    String?
+  icon          String?
+  isPublished   Boolean
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId], name: "by_user")
+  @@index([userId, parentDocumentId], name: "by_user_parent")
+}

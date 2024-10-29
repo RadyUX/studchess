@@ -7,7 +7,7 @@ import { hashPassword } from "@/utils/hash";
 
 
 
-const getUserByEmail = async (email: string) => {
+export const getUserByEmail = async (email: string) => {
     try{
         const user = await db.user.findUnique({
             where:{
@@ -23,27 +23,6 @@ const getUserByEmail = async (email: string) => {
 export const logout = async () =>{
     await signOut({ callbackUrl: "/" });
     revalidatePath("/");
-}
-
-export const login = async (formData: FormData) =>{
-    const rawFormData = {
-        email:formData.get("email"),
-        password: formData.get("password"),
-        redirectTo: "/"
-    }
-
-    const existingUser = await getUserByEmail(formData.get("email") as string)
-    console.log(existingUser)
-
-    try{
-        await signIn("credentials", rawFormData)
-        
-    }catch(error){
-        console.log('no user founds', error)
-        console.log(rawFormData)
-       
-    }
-
 }
 
 
