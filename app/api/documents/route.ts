@@ -5,17 +5,39 @@ import { auth } from "@/auth";
 import { ObjectId } from "mongodb";
 
 
-
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const documents = await db.document.findMany();
+    // Authentification de l'utilisateur
+    const session = await auth();
+
+    if (!session) {
+      return new NextResponse("Not authenticated", { status: 401 });
+    }
+
+    const userId = session.user.id;
+
+    // Récupérer les paramètres de requête (ex. : parentDocumentId)
+    const { searchParams } = new URL(request.url);
+    const parentDocument = searchParams.get("parentDocument");
+
+    // Requête à la base de données pour récupérer les documents
+    const documents = await db.document.findMany({
+      where: {
+        userId: userId, // Filtrer par utilisateur connecté
+        parentDocumentId: parentDocument || null, // Filtrer par parentDocumentId (optionnel)
+        isArchived: false, // Ne prendre que les documents non archivés
+      },
+      orderBy: {
+        createdAt: "desc", // Trier par date de création (ordre décroissant)
+      },
+    });
+
     return NextResponse.json(documents);
   } catch (error) {
-    console.error("Erreur lors de la récupération des documents : ", error);
+    console.error("Erreur lors de la récupération des documents :", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
-
 
 
 

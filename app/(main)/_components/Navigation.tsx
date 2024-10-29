@@ -8,6 +8,7 @@ import {useMediaQuery} from "usehooks-ts"
 import { useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import UserItem from "./UserItem";
 import Item from "./Item";
+import DocumentList from "./DocumentList";
 
 export const fetchDocuments = async () => {
     const response = await fetch("/api/documents");
@@ -158,11 +159,7 @@ const Navigation = () => {
  <Item onClick={handleCreate} label="New Page" icon={PlusCircle}/>
 </div>
 <div className="mt-4">
-{isLoading && <p>Loading documents...</p>}
-          {isError && <p>Error loading documents.</p>}
-          {documents?.map((document) => (
-            <p key={document.id}>{document.title}</p>
-          ))}
+ <DocumentList></DocumentList>
        
 </div>
 <div onMouseDown={handleMouseDown} onClick={resetWidth} className="opacity-0 group-hover/sidebar:opacity-100 transition cursor-ex-resize absolute h-full w-1 bg-primary/10 right-0 top-0">
