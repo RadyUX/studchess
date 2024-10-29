@@ -1,6 +1,8 @@
 "use client"
 import React, { useState } from 'react';
 import { register } from '@/actions/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 
 const MultiStepForm = () => {
@@ -14,7 +16,7 @@ const MultiStepForm = () => {
     eloRapid: '0',
     chesscomUsername: '',
   });
-
+const router = useRouter()
   // État pour suivre l'étape du formulaire
   const [step, setStep] = useState(1);
 
@@ -54,7 +56,9 @@ const MultiStepForm = () => {
     // Appeler l'action serveur
     try {
       const result = await register(data); // Appeler la fonction de serveur pour enregistrer l'utilisateur
-      console.log(result);
+      router.push('/main')
+      toast("account created , please login")
+    
     } catch (error) {
       console.error('Registration failed:', error);
     }

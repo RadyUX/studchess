@@ -156,7 +156,7 @@ const Navigation = () => {
  <UserItem/>
  <Item label="Search" icon={Search} isSearch/>
  <Item label="Settings" icon={Settings} isSearch/>
- <Item onClick={handleCreate} label="New Page" icon={PlusCircle}/>
+ <Item onClick={handleCreate} label="New Analysis" icon={PlusCircle}/>
 </div>
 <div className="mt-4">
  <DocumentList></DocumentList>

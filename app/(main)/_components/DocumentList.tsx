@@ -42,7 +42,7 @@ const DocumentList = ({ parentDocumentId = null, level = 0 }:DocumentListProps) 
   };
 
   const onRedirect = (documentId: string) => {
-    router.push(`/documents/${documentId}`);
+    router.push(`/main/${documentId}`);
   };
 
   if (isLoading) return <p>Loading documents...</p>;

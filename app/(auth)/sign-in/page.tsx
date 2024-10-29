@@ -44,7 +44,7 @@ const SignIn = () => {
           if (result && !result.error) {
             console.log('User signed in successfully:', result);
             // Rediriger l'utilisateur après la connexion réussie (si nécessaire)
-            router.push("/documents"); 
+            router.push("/main"); 
           } else {
             console.log('Sign in failed:', result?.error);
             if (result?.error === "CredentialsSignin") {
@@ -78,7 +78,7 @@ const SignIn = () => {
                     <div>
                         <AuthButton/>
                     </div>
-                    <AuthButton/>
+                   
                 </form>
             </section>
         </div>
