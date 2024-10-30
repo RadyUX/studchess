@@ -35,6 +35,7 @@
     "react": "^18",
     "react-chessboard": "^4.7.2",
     "react-chessboardjs-wrapper": "^0.4.2",
+    "react-circular-progressbar": "^2.1.0",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",

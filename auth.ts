@@ -67,12 +67,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         if (user) { // User is available during sign-in
           token.id = user.id
           token.eloBullet = user.eloBullet
+          token.eloBlitz = user.eloBlitz
+          token.eloRapid = user.eloRapid
+          token.chesscomUsername = user.chesscomUsername
         }
         return token
       },
       session({ session, token }) {
         session.user.id = token.id as string
         session.user.eloBullet = token.eloBullet as number
+        session.user.eloBlitz = token.eloBlitz as number
+        session.user.eloRapid = token.eloRapid as number
+        session.user.chesscomUsername = token.chesscomUsername as string;
         return session
       },
     },

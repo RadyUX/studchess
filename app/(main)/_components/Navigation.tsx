@@ -145,7 +145,7 @@ const Navigation = () => {
       }
     return ( <>
       <aside ref={sidebarRef}
-      className={cn("group/sidebar overflow-y-auto relative flex w-60 h-screen flex-col z-[9999] ", isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0")}>
+      className={cn("text-[#0077B6] group/sidebar overflow-y-auto relative flex w-60 h-screen flex-col z-[9999] ", isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0")}>
 
 
         <div  onClick={collapse} role="button" className={cn("h-6 w-6 text-muted-foreground hover:bg-neutral-600 top-3 right-2 absolute opacity-0 group-hover/sidebar:opacity-100 transition", isMobile && "opacity-100")}>

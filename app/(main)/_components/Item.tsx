@@ -109,12 +109,12 @@ const Item = ({
             onClick={handleExpand}
           >
             <ChevronIcon
-              className="h-4 w-4 shrink-0 text-muted-foreground/50"
+              className="h-4 w-4 shrink-0 text-muted-foreground/50 text-[#B8D4E3]"
             />
           </div>
           )}
            {documentIcon ? (
-        <div className="shrink-0 mr-2 text-[18px]">
+        <div className="shrink-0 mr-2 text-[18px] ">
           {documentIcon}
         </div>
       ) : (
@@ -122,7 +122,7 @@ const Item = ({
           className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground"
         />
       )}
-        <span className="truncate">{label}</span>
+        <span className="truncate text-[#B8D4E3]">{label}</span>
         
         {!!id && (
         <div className="ml-auto flex items-center gap-x-2">

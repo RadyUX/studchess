@@ -55,7 +55,7 @@ const DocumentList = ({ parentDocumentId = null, level = 0 }:DocumentListProps) 
           style={{
             paddingLeft: `${(level * 12) + 25}px`
           }}
-          className="text-sm font-medium text-muted-foreground/80"
+          className="text-[#B8D4E3] text-sm font-medium text-muted-foreground/80"
         >
           No pages inside
         </p>
