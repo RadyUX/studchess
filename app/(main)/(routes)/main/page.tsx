@@ -8,6 +8,14 @@ import { toast } from "sonner";
 import CardsElo from "../../_components/CardsElo";
 import CardsOpening from "../../_components/CardsOpening";
 
+import ChessboardComponent from "../../_components/ChessBoard";
+import Chessboard from "../../_components/ChessBoard";
+
+
+const initialBoard = [
+  // Initial chessboard state
+  // ... (You need to fill in the initial configuration)
+];
 
 const fetchDocuments = async (userId: string | null) => {
   if (!userId) {
@@ -99,8 +107,10 @@ const DocumentPage = () => {
         <Button onClick={onCreate}>
           <PlusCircle className="h-4 w-4 mr-2" /> Write your first analysis
         </Button>
+       
       )}
- 
+        <Chessboard board={initialBoard} />
+
     </div> );
 }
  
