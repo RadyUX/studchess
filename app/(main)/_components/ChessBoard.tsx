@@ -42,7 +42,7 @@ export default function ChessGame() {
   return (
     <div>
       <Chessboard
-        
+        width={500}
         position={fen} // Position actuelle de l'échiquier
         onDrop={onDrop} // Appelle la fonction onDrop lorsqu'un coup est joué
       />

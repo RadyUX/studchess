@@ -52,7 +52,24 @@ const fetchDocuments = async (userId: string | null) => {
   };
 };
 
- 
+const openings = [
+  {
+    name: 'Ruy Lopez Opening',
+    image: '/ruylopez.jpg',
+    status: 'TO_LEARN',
+  },
+  {
+    name: 'Sicilian Defense',
+    image: '/sicilian.jpg',
+    status: 'LEARNING',
+  },
+  {
+    name: 'Caro Kann Defense',
+    image: '/carokann.jpg',
+    status: 'LEARNING',
+  },
+  // Ajoute plus d'ouvertures ici
+];
 const DocumentPage = () => {
 
 
@@ -112,10 +129,16 @@ const DocumentPage = () => {
       })
 
     return ( 
-      <div className="h-full flex flex-col items-center justify-center space-y-4">
+      <div className="h-full ml-28 flex flex-col items-center justify-center space-y-4">
       <h2 className="text-2xl font-medium p-6">
         {session?.user.chesscomUsername}'s Chess Tracker ! 
       </h2>
+      {documents.length === 0 && (
+        <Button onClick={onCreate}>
+          <PlusCircle className="h-4 w-4 mr-2" /> Write your first analysis
+        </Button>
+       
+      )}
       <div className="flex flex-col w-full">
         <div className="mt-6 mb-6">
           <h1 className="text-4xl font-semibold mb-4">Objectif</h1>
@@ -127,26 +150,31 @@ const DocumentPage = () => {
           <Button variant='white' className="p-6 text-[16px] m-2"><Link href="https://www.chess.com/home"> Play a Game ♟</Link></Button>
         </div>
         <div className="mt-6 mb-6">
-          <h1 className="text-4xl font-semibold mb-4">My Repertory  <Button variant="white">
+          <h1 className="text-4xl font-semibold mb-4">My Repertoire  <Button variant="white">
           <PlusCircle className="h-4 w-4 mr-2" /> Add Opening
         </Button></h1>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-            <CardsOpening />
-            <CardsOpening />
-            <CardsOpening />
-            <CardsOpening />
+          {openings.map((opening) => (
+            <CardsOpening
+              key={opening.name}
+              name={opening.name}
+              image={opening.image}
+              status={opening.status}
+          />
+      ))}
+          </div>
+        </div>
+        <div className="mt-6 mb-6">
+          <h1 className="text-4xl font-semibold mb-4">My Games</h1>
+          <div className="flex gap-20">
+          <Chessboard />
+          <Chessboard />
+          <Chessboard />
           </div>
         </div>
       </div>
     
-      {documents.length === 0 && (
-        <Button onClick={onCreate}>
-          <PlusCircle className="h-4 w-4 mr-2" /> Write your first analysis
-        </Button>
        
-      )}
-        <Chessboard />
-
     </div> );
 }
  

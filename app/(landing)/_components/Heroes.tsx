@@ -11,7 +11,7 @@ const Heroes = () => {
             </div>
             <div className="flex justify-between gap-16">
                 <h1 className="font-bold text-xl">📃 Write Your Own Analysis</h1>
-                <h1 className="font-bold text-xl">🔨 Build Your Repertory</h1>
+                <h1 className="font-bold text-xl">🔨 Build Your Repertoire</h1>
                 <h1 className="font-bold text-xl">🔥 Follow Your Progress</h1>
             </div>
 

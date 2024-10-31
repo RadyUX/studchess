@@ -30,7 +30,9 @@ model User {
   sessions       Session[]
 
     documents       Document[]
+    repertory       Repertory? 
 }
+
 
  
 model Session {
@@ -72,4 +74,39 @@ model Document {
 
   @@index([userId], name: "by_user")
   @@index([userId, parentDocumentId], name: "by_user_parent")
+}
+
+
+
+
+
+model Repertory {
+  id              String     @id @default(cuid()) @map("_id") @db.ObjectId
+  userId          String      @unique @db.ObjectId
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  openings        Opening[]  // Relation avec les ouvertures
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+enum OpeningStatus {
+  EN_COURS
+  A_APPRENDRE
+  MAITRISE
+}
+
+model Opening {
+  id              String     @id @default(cuid()) @map("_id") @db.ObjectId
+  name            String
+  moves           String
+  category        String
+  notes           String?
+  repertoryId     String     @db.ObjectId
+  repertory       Repertory  @relation(fields: [repertoryId], references: [id], onDelete: Cascade)
+
+  image           String?    
+  status          OpeningStatus  @default(A_APPRENDRE) // Champ pour indiquer le statut de progression
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
