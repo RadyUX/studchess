@@ -91,6 +91,32 @@ export const fetchUserRepertory = async (userId: string | null) => {
 
   return response.json();
 }
+
+
+export const archiveDocument = async (documentId, userId) => {
+  try {
+    const response = await fetch("/api/documents/archive", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ documentId, userId }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to archive document");
+    }
+
+    const data = await response.json();
+    console.log("Archive successful:", data.message);
+  } catch (error) {
+    console.error("Error archiving document:", error);
+  }
+};
+
+
+archiveDocument("documentId_example", "userId_example");
+
 const DocumentPage = () => {
 const [isModal, setIsModal] = useState(false)
 const [isPopupOpen, setIsPopupOpen] = useState(false);

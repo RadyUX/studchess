@@ -1,10 +1,10 @@
 "use client"
 
-import {  ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import {  ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
 import { ObjectId } from "bson";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
@@ -14,7 +14,9 @@ import {
     DropdownMenuItem,
     DropdownMenuSeparator
   } from "@/components/ui/dropdown-menu";
-
+import { useSession } from "next-auth/react";
+import { fetchDocuments } from "./Navigation";
+import { useQuery } from "@tanstack/react-query";
 interface itemProps {
     id?: ObjectId;
     documentIcon?: string;
@@ -44,6 +46,8 @@ const Item = ({
     onExpand,
     expanded, }: itemProps) => {
         const router = useRouter()
+        const session = useSession()
+        const query = useQueryClient()
         const createDocument = async ({ title, parentDocument }: { title: string; parentDocument: ObjectId }): Promise<string> => {
             const response = await fetch("/api/documents", {
               method: "POST",
@@ -71,7 +75,7 @@ const Item = ({
               if (!expanded) {
                 onExpand?.();
               }
-              router.push(`/documents/${documentId}`);
+             // router.push(`/documents/${documentId}`);
             },
           });
 
@@ -94,6 +98,56 @@ const Item = ({
             event.stopPropagation();
             onExpand?.();
           };
+
+
+          const archiveDocument = async ({ documentId, userId }: { documentId: ObjectId; userId: string }) => {
+            const response = await fetch("/api/documents", {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ documentId: documentId.toString(), userId }),
+            });
+          
+            if (!response.ok) {
+              throw new Error("Failed to archive document");
+            }
+            return response.json();
+          };
+          
+        // Mutation pour archiver un document
+        const { mutateAsync: archive } = useMutation({
+            mutationFn: archiveDocument,
+            onError: () => {
+                toast.error("Failed to archive the document.");
+            },
+            onSuccess: () => {
+                toast.success("Document archived successfully.");
+                query.invalidateQueries(["documents"]); // Invalider les requêtes avec le cache "documents"
+    
+            },
+        })
+          // Gestion de l'archivage du document
+          const onArchive = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            event.stopPropagation(); // Arrête la propagation du clic
+            event.preventDefault();  // Empêche le comportement par défaut
+            if (!id) return;
+          
+            try {
+              await archive({
+                documentId: id,
+                userId: session.data?.user.id,
+              });
+            } catch (error) {
+              console.error("Erreur lors de l'archivage du document :", error);
+            }
+          };
+
+        const { data: documents = []} = useQuery({
+          queryKey: ["documents"],
+          queryFn: () => fetchDocuments(session.data?.user.id),
+        });
+          
     return ( 
 
         
@@ -135,7 +189,7 @@ const Item = ({
                 role="button"
                 className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
               >
-             
+             <MoreHorizontal className="h-4 w-4 text-muted-foreground"/>
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -144,7 +198,10 @@ const Item = ({
               side="right"
               forceMount
             >
-           
+           <DropdownMenuItem onClick={onArchive}>
+            <Trash className="h-4 w-4 mr-2 "/>
+            delete
+           </DropdownMenuItem>
               <DropdownMenuSeparator />
               <div className="text-xs text-muted-foreground p-2">
                 Last edited by: username

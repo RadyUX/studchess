@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
+import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useRef, ElementRef, useState, useEffect } from "react";
 import {useMediaQuery} from "usehooks-ts"
@@ -9,7 +9,8 @@ import { useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
 import UserItem from "./UserItem";
 import Item from "./Item";
 import DocumentList from "./DocumentList";
-
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import Trashbox from "./Trashbox";
 export const fetchDocuments = async () => {
     const response = await fetch("/api/documents");
     if (!response.ok) {
@@ -145,7 +146,7 @@ const Navigation = () => {
       }
     return ( <>
       <aside ref={sidebarRef}
-      className={cn("text-[#0077B6] group/sidebar overflow-y-auto relative flex w-60 h-screen flex-col z-[9999] ", isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0")}>
+      className={cn(" group/sidebar overflow-y-auto relative flex w-60 h-screen flex-col z-[9999] ", isResetting && "transition-all ease-in-out duration-300", isMobile && "w-0")}>
 
 
         <div  onClick={collapse} role="button" className={cn("h-6 w-6 text-muted-foreground hover:bg-neutral-600 top-3 right-2 absolute opacity-0 group-hover/sidebar:opacity-100 transition", isMobile && "opacity-100")}>
@@ -157,6 +158,14 @@ const Navigation = () => {
  <Item label="Search" icon={Search} isSearch/>
  <Item label="Settings" icon={Settings} isSearch/>
  <Item onClick={handleCreate} label="New Analysis" icon={PlusCircle}/>
+ <Popover>
+  <PopoverTrigger>
+    <Item label="Trash" icon={Trash} />
+    <PopoverContent className="p-0 w-72" side={isMobile ? "bottom" : "right"}>
+      <Trashbox/>
+    </PopoverContent>
+  </PopoverTrigger>
+ </Popover>
 </div>
 <div className="mt-4">
  <DocumentList></DocumentList>

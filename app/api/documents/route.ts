@@ -5,6 +5,61 @@ import { auth } from "@/auth";
 import { ObjectId } from "mongodb";
 
 
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json();
+    const { documentId, userId } = body;
+
+    if (!documentId || !userId) {
+      return NextResponse.json({ error: "Missing documentId or userId" }, { status: 400 });
+    }
+
+    await recursiveArchive(documentId, userId);
+
+    return NextResponse.json({ message: "Document and its children archived successfully" });
+  } catch (error) {
+    console.error("Erreur interne :", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
+
+// Fonction récursive pour archiver un document et ses enfants
+async function recursiveArchive(documentId: string, userId: string) {
+  // Rechercher tous les enfants du document donné
+  const children = await db.document.findMany({
+    where: {
+      userId: userId,
+      parentDocumentId: documentId,
+    },
+  });
+
+  // Archiver tous les enfants trouvés
+  for (const child of children) {
+    await db.document.update({
+      where: {
+        id: child.id,
+      },
+      data: {
+        isArchived: true,
+      },
+    });
+
+    // Appeler la fonction récursive pour archiver les enfants du document courant
+    await recursiveArchive(child.id, userId);
+  }
+
+  // Archiver le document parent donné
+  await db.document.update({
+    where: {
+      id: documentId,
+    },
+    data: {
+      isArchived: true,
+    },
+  });
+}
+
+
 export async function GET(request: Request) {
   try {
     // Authentification de l'utilisateur
