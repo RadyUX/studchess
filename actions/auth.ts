@@ -64,10 +64,17 @@ export const register = async (formData: FormData) =>{
             name: rawFormData.name as string,
             email: rawFormData.email as string,
             hashedPassword: hashedPassword,
-            eloBullet: eloBullet ,
+            eloBullet: eloBullet,
             eloBlitz: eloBlitz,
             eloRapid: eloRapid,
             chesscomUsername: rawFormData.chesscomUsername,
+            // Crée un répertoire par défaut lors de la création de l'utilisateur
+            repertory: {
+              create: {},
+            },
+          },
+          include: {
+            repertory: true, // Inclut les répertoires dans la réponse
           },
         });
     

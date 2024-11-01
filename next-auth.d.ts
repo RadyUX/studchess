@@ -21,5 +21,6 @@ declare module "next-auth" {
     eloBlitz: number;
     eloRapid: number;
     chesscomUsername: string;
+    repertoryId: string
   }
 }

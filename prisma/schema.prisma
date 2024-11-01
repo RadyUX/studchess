@@ -81,7 +81,7 @@ model Document {
 
 
 model Repertory {
-  id              String     @id @default(cuid()) @map("_id") @db.ObjectId
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
   userId          String      @unique @db.ObjectId
   user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   openings        Opening[]  // Relation avec les ouvertures
@@ -97,13 +97,14 @@ enum OpeningStatus {
 }
 
 model Opening {
-  id              String     @id @default(cuid()) @map("_id") @db.ObjectId
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
   name            String
   moves           String
+  variation       String?
   category        String
   notes           String?
-  repertoryId     String     @db.ObjectId
-  repertory       Repertory  @relation(fields: [repertoryId], references: [id], onDelete: Cascade)
+  repertoryId     String?     @db.ObjectId
+  repertory       Repertory?  @relation(fields: [repertoryId], references: [id], onDelete: Cascade)
 
   image           String?    
   status          OpeningStatus  @default(A_APPRENDRE) // Champ pour indiquer le statut de progression

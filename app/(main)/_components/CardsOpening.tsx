@@ -45,17 +45,10 @@ const CardsOpening = ({ name, image, status, onClick }) => {
 
     return (
       
-      <div  onClick={handleOpenPopup} className="cursor-pointer w-full max-w-[14rem] sm:max-w-[16rem] md:max-w-[18rem] lg:max-w-[20rem] xl:max-w-[24rem] bg-[#B8D4E3] rounded-lg p-4 m-2 aspect-square flex flex-col justify-between items-center">
+      <div  onClick={onClick} className="cursor-pointer w-full max-w-[14rem] sm:max-w-[16rem] md:max-w-[18rem] lg:max-w-[20rem] xl:max-w-[24rem] bg-[#B8D4E3] rounded-lg p-4 m-2 aspect-square flex flex-col justify-between items-center">
             
-            {isPopupOpen && (
-                <OpeningPopup
-                    title="Ruy Lopez Opening" 
-                    variants={sampleVariants} 
-                    onClose={handleClosePopup}
-                    onAddVariant={() => console.log("Ajouter une nouvelle variante")}
-                />
-            )}
-      <h3 className="text-lg font-semibold text-center">{name}</h3>
+           
+      <h3 className="text-lg font-semibold text-center text-[#0077B6] ">{name}</h3>
       
 
       <div className="relative w-full h-full  rounded-lg">

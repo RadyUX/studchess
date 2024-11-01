@@ -58,6 +58,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 eloBlitz: user.eloBlitz,
                 eloRapid: user.eloRapid,
                 chesscomUsername: user.chesscomUsername,
+            
               };
         },
       }),
@@ -70,6 +71,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           token.eloBlitz = user.eloBlitz
           token.eloRapid = user.eloRapid
           token.chesscomUsername = user.chesscomUsername
+          token.repertoryId = user.repertoryId
         }
         return token
       },
@@ -79,6 +81,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.eloBlitz = token.eloBlitz as number
         session.user.eloRapid = token.eloRapid as number
         session.user.chesscomUsername = token.chesscomUsername as string;
+        session.user.repertoryId = token.repertoryId as string
         return session
       },
     },
