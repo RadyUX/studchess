@@ -1,4 +1,4 @@
-"use client"
+"use client,_c"
 
 import React from 'react'
 import { useFormStatus } from 'react-dom'

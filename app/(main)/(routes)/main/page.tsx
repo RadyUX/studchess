@@ -11,8 +11,33 @@ import { useState } from "react";
 
 import Chessboard, { fetchFen } from "../../_components/ChessBoard";
 import Link from "next/link";
-import OpeningListModal from "../../_components/OpeningListModal";
+import OpeningListModal, { fetchOpening } from "../../_components/OpeningListModal";
 import OpeningPopup from "../../_components/OpeningModal";
+
+import {ObjectId} from "bson"
+// fetch variante
+// Fonction pour fetch les variations d'une ouverture donnée
+const fetchOpeningVariations = async (openingId: string | undefined) => {
+   console.log("opening id", openingId)
+  try {
+    const response = await fetch(`/api/variation?openingId=${openingId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch opening variations");
+    }
+
+    const data = await response.json();
+    console.log("Variations récupérées :", data);
+    return data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des variantes :", error);
+  }
+};
 
 
 
@@ -59,24 +84,6 @@ const fetchDocuments = async (userId: string | null) => {
 
 
 
-const openings = [
-  {
-    name: 'Ruy Lopez Opening',
-    image: '/ruylopez.jpg',
-    status: 'TO_LEARN',
-  },
-  {
-    name: 'Sicilian Defense',
-    image: '/sicilian.jpg',
-    status: 'LEARNING',
-  },
-  {
-    name: 'Caro Kann Defense',
-    image: '/carokann.jpg',
-    status: 'LEARNING',
-  },
-  // Ajoute plus d'ouvertures ici
-];
 
 
 export const fetchUserRepertory = async (userId: string | null) => {
@@ -93,10 +100,10 @@ export const fetchUserRepertory = async (userId: string | null) => {
 }
 
 
-export const archiveDocument = async (documentId, userId) => {
+const archiveDocument = async (documentId, userId) => {
   try {
     const response = await fetch("/api/documents/archive", {
-      method: "PATCH",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -114,13 +121,13 @@ export const archiveDocument = async (documentId, userId) => {
   }
 };
 
-
+// Appeler la fonction pour archiver un document
 archiveDocument("documentId_example", "userId_example");
 
 const DocumentPage = () => {
 const [isModal, setIsModal] = useState(false)
 const [isPopupOpen, setIsPopupOpen] = useState(false);
-
+const [selectedOpening, setSelectedOpening] = useState({});
 
 
 const handleOpenPopup = (e) => {
@@ -149,7 +156,25 @@ const sampleVariants = [
     queryFn: () => fetchDocuments(session?.user.id),
     enabled: !!session?.user.id, // Active la requête seulement si l'utilisateur est connecté
   });
+  
+  const { data: opening = [] } = useQuery({
+    queryKey: ["openings"],
+    queryFn: () => fetchOpening(),
 
+  });
+  
+  const { data: variation = [], isLoading: isLoadingVariations, isError: isErrorVariations } = useQuery({
+    queryKey: ["variation", selectedOpening.id],
+    queryFn: () => fetchOpeningVariations(selectedOpening.id),
+    enabled: !!selectedOpening?.id, // Assurez-vous que `opening.id` est défini avant d'appeler cette requête
+  });
+
+  const handleSelectOpening = (opening) => {
+    setSelectedOpening(opening);
+    setIsPopupOpen(true);
+  };
+
+  
     const createMutation = useMutation({
         mutationFn: async (newDocument) => {
           const response = await fetch("/api/documents", {
@@ -250,14 +275,15 @@ const sampleVariants = [
         {isModal && (
                <OpeningListModal onClose={handleClose} />
             )}
-             {isPopupOpen && (
-                <OpeningPopup
-                    title="Ruy Lopez Opening" 
-                    variants={sampleVariants} 
-                    onClose={handleClosePopup}
-                    onAddVariant={() => console.log("Ajouter une nouvelle variante")}
-                />
-            )}
+            {isPopupOpen && selectedOpening && (
+          <OpeningPopup
+            openingId={selectedOpening.id}
+            title={selectedOpening.name}
+            variants={variation}
+            onClose={handleClosePopup}
+            onAddVariant={() => console.log("Ajouter une nouvelle variante")}
+          />
+        )}
         <div className="mt-6 mb-6">
           <h1 className="text-4xl font-semibold mb-4">My Repertoire  <Button variant="white" onClick={handleModal}>
           <PlusCircle className="h-4 w-4 mr-2" /> Add Opening
@@ -270,7 +296,7 @@ const sampleVariants = [
                   name={opening.name}
                   image={opening.image}
                   status={opening.status}
-                  onClick={handleOpenPopup}
+                  onClick={() => handleSelectOpening(opening)}
                 />
               ))
             ) : (

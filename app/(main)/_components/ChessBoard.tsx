@@ -30,7 +30,7 @@ export default function ChessGame({ initialFen = 'start' }) {
    
 
     
-  // Fonction pour gérer le déplacement des pièces
+
   const onDrop = ({ sourceSquare, targetSquare }) => {
     // Vérifier si le mouvement est légal avant de l'appliquer
     const moves = chess.moves({ square: sourceSquare, verbose: true });

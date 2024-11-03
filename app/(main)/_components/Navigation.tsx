@@ -11,6 +11,7 @@ import Item from "./Item";
 import DocumentList from "./DocumentList";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Trashbox from "./Trashbox";
+
 export const fetchDocuments = async () => {
     const response = await fetch("/api/documents");
     if (!response.ok) {

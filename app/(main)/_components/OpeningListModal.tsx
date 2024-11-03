@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
-import { fetchUserRepertory } from "../(routes)/main/page";
+import { fetchOpeningVariations, fetchUserRepertory } from "../(routes)/main/page";
 
 const fetchOpening = async () =>{
     
@@ -26,11 +26,11 @@ const OpeningListModal = ({onClose}) => {
     const { data: session } = useSession();
     const queryClient = useQueryClient();
    
-    // Utilisez React Query pour récupérer les ouvertures du répertoire de l'utilisateur
+
   const { data: repertory} = useQuery({
     queryKey: ['userRepertory', session?.user.id],
     queryFn: () => fetchUserRepertory(session?.user.id),
-    enabled: !!session?.user.id, // Active la requête seulement si l'utilisateur est connecté
+    enabled: !!session?.user.id,
   });
 
   
@@ -62,11 +62,19 @@ const OpeningListModal = ({onClose}) => {
       });
     
 
+      const { data: variation = [], isLoading: isLoadingVariations, isError: isErrorVariations } = useQuery({
+        queryKey: ["variation", openings?.id],
+        queryFn: () => fetchOpeningVariations(openings?.id),
+        enabled: !!openings?.id, // Assurez-vous que `opening.id` est défini avant d'appeler cette requête
+      })
       if (isLoading) return <p>Chargement des ouvertures...</p>;
       if (isError) return <p>Erreur lors du chargement des ouvertures</p>;
 
-  
 
+      if ( isLoadingVariations) return <p>Chargement des ouvertures...</p>;
+      if (isErrorVariations) return <p>Erreur lors du chargement des ouvertures</p>;
+
+  
     
       const addOpening = (openingId) => {
         if (!session?.user.id) {
@@ -77,8 +85,8 @@ const OpeningListModal = ({onClose}) => {
         const repertoryId = repertory.id
     
         const updatedRepertory = {
-          repertoryId: repertoryId, // Assurez-vous que vous avez l'ID du répertoire
-          openingId, // ID de l'ouverture à ajouter
+          repertoryId: repertoryId,
+          openingId, 
         };
       
 
@@ -100,6 +108,10 @@ const OpeningListModal = ({onClose}) => {
             <CardsOpening key={opening.id} name={opening.name} image={opening.image} status={opening.status} onClick={() => addOpening(opening.id)}/>
            
           ))}
+        {variation.map((variant) => (
+  <div key={variant.id}>{variant.note}</div>
+))}
+
           </div>
           <button
             onClick={onClose}
@@ -107,6 +119,7 @@ const OpeningListModal = ({onClose}) => {
           >
             Fermer
           </button>
+         
         </div>
       </div>
         

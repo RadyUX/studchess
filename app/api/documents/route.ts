@@ -134,3 +134,6 @@ export async function POST(req: Request) {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
+
+
+export async function DELETE(req: Request) {}
