@@ -48,6 +48,42 @@ export async function GET(request: NextRequest) {
 
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db"; // Votre instance Prisma
+import { auth } from "@/auth";
+
+
+export async function POST(request) {
+  // Authentification
+  const session = await auth();
+  if (!session) {
+    return new NextResponse("Not authenticated", { status: 401 });
+  }
+
+  try {
+    // Extraction des données du body
+    const body = await request.json(); // Récupérer le JSON du body de la requête
+    const { notes, moves, openingId } = body;
+
+    // Validation des données reçues
+    if (!notes || !moves || !openingId) {
+      return new NextResponse("Missing fields", { status: 400 });
+    }
+
+    // Création de la variation dans la base de données
+    const variation = await db.variation.create({
+      data: {
+        notes,
+        moves,
+        openingId,
+      },
+    });
+
+    // Réponse en cas de succès
+    return new NextResponse(JSON.stringify(variation), { status: 201 });
+  } catch (error) {
+    console.error("Erreur lors de la création de la variation :", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
+  }
+}
 
 export async function GET(request: Request) {
   try {

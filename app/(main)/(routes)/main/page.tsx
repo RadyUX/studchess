@@ -281,7 +281,7 @@ const sampleVariants = [
             title={selectedOpening.name}
             variants={variation}
             onClose={handleClosePopup}
-            onAddVariant={() => console.log("Ajouter une nouvelle variante")}
+          
           />
         )}
         <div className="mt-6 mb-6">

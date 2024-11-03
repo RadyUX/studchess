@@ -3,9 +3,50 @@
 import React, { useState } from 'react';
 import ChessGame from './ChessBoard';
 import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 
-const OpeningPopup = ({ title, openingId, variants, onClose, onAddVariant }) => {
+
+
+const OpeningPopup = ({ title, openingId, variants, onClose }) => {
     const [addVariant, setAddVariant] = useState(false)
+    const queryClient = useQueryClient()
+
+    const handleAddNewVariation = async (event) => {
+        event.preventDefault();
+
+        // Utiliser FormData pour collecter les données du formulaire
+        const formData = new FormData(event.target);
+        formData.append('openingId', openingId); // Ajouter l'ID de l'ouverture
+
+        // Créer un objet JSON à partir des données de FormData
+        const newVariant = {
+            moves: formData.get('moves'),
+            notes: formData.get('notes'),
+            openingId: formData.get('openingId'),
+        };
+
+        try {
+            const response = await fetch('/api/variation', {
+                method: 'POST',
+                body: JSON.stringify(newVariant),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (!response.ok) {
+                console.log(newVariant)
+                throw new Error("Erreur lors de l'ajout de la variante");
+            }
+
+            console.log("Nouvelle variante ajoutée :", newVariant);
+            queryClient.invalidateQueries(["variation", openingId]);
+            // Fermer le formulaire après succès
+            setAddVariant(false);
+        } catch (error) {
+            console.error("Erreur lors de l'ajout de la variante :", error);
+        }
+    };
 
     const handleAddVariant = () =>{
         setAddVariant(true)
@@ -27,9 +68,12 @@ const OpeningPopup = ({ title, openingId, variants, onClose, onAddVariant }) => 
              
                 {/* Liste des Variantes */}
                 <div className="space-y-4">
+               
+
+                <div className='grid grid-cols-1 max-h-[600px] overflow-y-scroll gap-y-4'>
                 {
                     addVariant && (
-                        <form onSubmit={onAddVariant} className="p-4 border border-gray-200 rounded-lg">
+                        <form onSubmit={handleAddNewVariation} className="p-4 border border-gray-200 rounded-lg">
                         <h2 className='text-center'>Ajouter une Nouvelle Variante</h2>
                         <div className="flex flex-col gap-3 mt-4">
                             <label>Coups de la variante:</label>
@@ -38,7 +82,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose, onAddVariant }) => 
                                 name="moves"
                                 placeholder="Ex: d4 f5 Cf3 Cf6"
                                 required
-                                className="p-4 rounded-lg w-full"
+                                className="p-4 rounded-lg w-full text-black"
                             />
                         </div>
                         <div className="flex flex-col gap-3 mt-4">
@@ -57,13 +101,15 @@ const OpeningPopup = ({ title, openingId, variants, onClose, onAddVariant }) => 
                     )
                 }
                     {variants.map((variant, index) => (
-                        <div key={index} className="p-4 border border-gray-200 rounded-lg">
+                        <div key={index} className="p-4 border border-gray-200 rounded-lg ">
                             <p className="font-semibold">Coup de la variante:</p>
                             <p>{variant.moves}</p>
                             <p className="font-semibold mt-2">Note:</p>
                             <p>{variant.notes || "Write your idea"}</p>
+                            <Button variant="destructive" size='sm' className='rounded-full mt-4 mr-9'>X</Button>
                         </div>
                     ))}
+                    </div>
                 </div>
                
                
