@@ -150,6 +150,8 @@ const sampleVariants = [
 
     const { data: session } = useSession();
     const queryClient = useQueryClient();
+
+    
   //  vérifie s'il y a des documents existants
   const { data: documents = [], isLoading, isError } = useQuery({
     queryKey: ["documents"],

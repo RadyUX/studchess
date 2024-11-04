@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings, Trash } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
 import { useRef, ElementRef, useState, useEffect } from "react";
 import {useMediaQuery} from "usehooks-ts"
 import { useQuery, useMutation, useQueryClient} from "@tanstack/react-query";
@@ -11,6 +11,9 @@ import Item from "./Item";
 import DocumentList from "./DocumentList";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Trashbox from "./Trashbox";
+import { useSearch } from "@/hooks/useSearch";
+import { useSettings } from "@/hooks/useSetting";
+import Navbar from "./Navbar";
 
 export const fetchDocuments = async () => {
     const response = await fetch("/api/documents");
@@ -37,9 +40,14 @@ export const fetchDocuments = async () => {
   };
   
 const Navigation = () => {
+  const search = useSearch()
+  const settings = useSettings()
     const pathname = usePathname()
+    const params = useParams()
     const isMobile = useMediaQuery("(max-width: 768px)")
     const queryClient = useQueryClient();
+
+
     //fetch
     const { data: documents, isLoading, isError } = useQuery({
         queryKey: ["documents"],
@@ -156,8 +164,8 @@ const Navigation = () => {
 
 <div>
  <UserItem/>
- <Item label="Search" icon={Search} isSearch/>
- <Item label="Settings" icon={Settings} isSearch/>
+ <Item label="Search" icon={Search} isSearch onClick={search.onOpen}/>
+ <Item label="Settings" icon={Settings} isSearch onClick={settings.onOpen}/>
  <Item onClick={handleCreate} label="New Analysis" icon={PlusCircle}/>
  <Popover>
   <PopoverTrigger>
@@ -177,9 +185,19 @@ const Navigation = () => {
 </div>
       </aside>
       <div ref={navbarRef} className={cn("absolute top-0 z-[99999] left-60 w-[calc(100%-240px)]", isResetting && "transition-all ease-in-out duration-300", isMobile && 'left-0 w-full')}>
-        <nav className="bg-transparent px-3 py-2 w-full ">
-            {isCollapsed && <MenuIcon onClick={resetWidth} className="h-6 w-6 text-muted-foreground"/>}
-        </nav>
+        
+        {!!params.id ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+
+          <nav className="bg-transparent px-3 py-2 w-full ">
+          {isCollapsed && <MenuIcon onClick={resetWidth} className="h-6 w-6 text-muted-foreground"/>}
+      </nav>
+        )
+         
+      }
+        
+     
       </div>
     </> );
 }

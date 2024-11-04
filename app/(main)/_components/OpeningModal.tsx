@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import ChessGame from './ChessBoard';
 import { Button } from '@/components/ui/button';
 import { useQueryClient } from '@tanstack/react-query';
+import { ConfirmModal } from './ConfirmDialog';
+import { Trash } from 'lucide-react';
 
 
 
@@ -48,6 +50,10 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
         }
     };
 
+
+    const onDelete = (varitantId) =>{
+        console.log("delete document")
+    }
     const handleAddVariant = () =>{
         setAddVariant(true)
     }
@@ -97,16 +103,26 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
 
                         <Button variant="white" type="submit" className="m-4">Enregistrer</Button>
                         <Button variant="destructive" className="m-4" type="button" onClick={() => setAddVariant(false)} className="cancel-button">Annuler</Button>
+                        
                     </form>
                     )
                 }
+              
                     {variants.map((variant, index) => (
                         <div key={index} className="p-4 border border-gray-200 rounded-lg ">
                             <p className="font-semibold">Coup de la variante:</p>
                             <p>{variant.moves}</p>
                             <p className="font-semibold mt-2">Note:</p>
                             <p>{variant.notes || "Write your idea"}</p>
-                            <Button variant="destructive" size='sm' className='rounded-full mt-4 mr-9'>X</Button>
+                            <ConfirmModal onConfirm={() => onDelete(variant.id)}>
+                            <div
+                                    role="button"
+                                    className="rounded-full w-10 h-10 mt-4 bg-destructive text-destructive-foreground hover:bg-destructive/90 flex justify-center items-center"
+                                >
+                                    <Trash className="h-5 w-5 text-white" />
+                                </div>
+                            </ConfirmModal>
+                          
                         </div>
                     ))}
                     </div>

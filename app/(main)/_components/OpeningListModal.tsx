@@ -7,18 +7,24 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import { fetchOpeningVariations, fetchUserRepertory } from "../(routes)/main/page";
+import { error } from "console";
 
-const fetchOpening = async () =>{
-    
-
-      const response = await fetch(`/api/opening`);
+const fetchOpening = async () => {
+  console.log("Appel à fetchOpening");  // Tracez le point d'entrée
+  try {
+      const response = await fetch('/api/opening');
       if (!response.ok) {
-        throw new Error("Failed to fetch openings");
+          throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
       }
-    
-      return response.json()
+      const data = await response.json();
+      console.log("Données récupérées par fetchOpening :", data);
+      return data;
+  } catch (error) {
+      console.error("Erreur dans fetchOpening :", error);
+      throw error;  // Relancez l'erreur pour que `useQuery` la capte
   }
-  
+};
+
 
 
 const OpeningListModal = ({onClose}) => {
@@ -59,6 +65,10 @@ const OpeningListModal = ({onClose}) => {
       const { data: openings = [], isLoading, isError } = useQuery({
         queryKey: ["openings"],
         queryFn: () => fetchOpening(),
+        cacheTime: 0,  // Désactive le cache
+        staleTime: 0,  
+        enabled: true, // Marque les données comme obsolètes immédiatement
+        
       });
     
 
@@ -68,11 +78,14 @@ const OpeningListModal = ({onClose}) => {
         enabled: !!openings?.id, // Assurez-vous que `opening.id` est défini avant d'appeler cette requête
       })
       if (isLoading) return <p>Chargement des ouvertures...</p>;
-      if (isError) return <p>Erreur lors du chargement des ouvertures</p>;
+      if (isError) {
+        console.error("Erreur rencontrée:", isError);
+        return <p>Erreur lors de la récupération des données.</p>;
+    }
 
 
-      if ( isLoadingVariations) return <p>Chargement des ouvertures...</p>;
-      if (isErrorVariations) return <p>Erreur lors du chargement des ouvertures</p>;
+      if ( isLoadingVariations) return <p>Chargement  des variantes...</p>;
+      if (isErrorVariations) return <p>Erreur lors du chargement des variantes</p>;
 
   
     

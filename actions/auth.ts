@@ -4,9 +4,66 @@ import { signIn, signOut } from "next-auth/react";
 import { revalidatePath } from "next/cache"
 import { db } from "@/db"
 import { hashPassword } from "@/utils/hash";
+import { auth } from "@/auth";
 
 
 
+export async function updateUserSettings({
+  userId,
+  bullet,
+  blitz,
+  rapid,
+}: {
+  userId: string;
+  bullet: string;
+  blitz: string;
+  rapid: string;
+}) {
+  try {
+    // Mettre à jour les objectifs ELO de l'utilisateur dans la base de données
+    const updatedUser = await db.user.update({
+      where: { id: userId },
+      data: {
+        eloBullet: parseInt(bullet, 10),
+        eloBlitz: parseInt(blitz, 10),
+        eloRapid: parseInt(rapid, 10),
+      },
+    });
+    console.log(updatedUser)
+    return updatedUser;
+    
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour des paramètres utilisateur:", error);
+    throw new Error("Erreur lors de la mise à jour des informations.");
+  }
+}
+
+export const getSearch = async () =>{
+  try{
+    const session = await auth()
+    if(!session){
+      throw new Error('not authentivcated')
+    }
+      const userId = session.user.id 
+
+      const document = await db.document.findMany({
+        where: {
+          userId,
+          isArchived: false
+        },
+        orderBy: {
+          createdAt: "desc"
+        },
+      })
+
+
+      return document
+
+  }catch(error){
+    console.log(error)
+    throw new Error("error")
+  }
+}
 export const getUserByEmail = async (email: string) => {
     try{
         const user = await db.user.findUnique({
@@ -89,3 +146,4 @@ export const register = async (formData: FormData) =>{
     console.log(error)
   }
 }
+

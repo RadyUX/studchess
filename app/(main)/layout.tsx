@@ -4,6 +4,7 @@ import { Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/Navigation";
+import { SearchCommand } from "./_components/search-command";
 
 const MainLayout =  ({children}: { children: React.ReactNode}) => {
     const { data: session, status } = useSession(); 
@@ -21,6 +22,7 @@ const MainLayout =  ({children}: { children: React.ReactNode}) => {
       <div className="h-full flex">
         <Navigation/>
         <main className="flex-1 h-full overflow-y-auto">
+        <SearchCommand />
         {children}
         </main>
       
