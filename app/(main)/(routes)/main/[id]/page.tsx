@@ -1,5 +1,6 @@
 "use client"; // Ajoutez ceci si le composant est destiné à être côté client
 
+import Cover from "@/app/(main)/_components/Cover";
 import { fetchDocumentId } from "@/app/(main)/_components/Navbar";
 import Toolbar from "@/app/(main)/_components/Toolbar";
 import { Document } from "@prisma/client";
@@ -24,7 +25,8 @@ const DocumentPage = ({ params }: DocumentIdPageProps) => {
 
   return (
     <div className="pb-40">
-        <div className="h-[35vh]"></div>
+
+       <Cover url={doc.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <Toolbar initialData={doc} />
       </div>

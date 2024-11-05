@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SettingsModal } from "../SettingsModal";
+import ConverImageModal from "../CoverImageModal";
 
 
 export const ModalProvider = () => {
@@ -18,7 +19,7 @@ export const ModalProvider = () => {
   return (
     <>
       <SettingsModal />
-   
+      <ConverImageModal />
     </>
   );
 };

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ['i.imgur.com'], // Autorise le domaine d'images directes d'Imgur
+        domains: ['i.imgur.com', "files.edgestore.dev"], // Autorise le domaine d'images directes d'Imgur
       },
 };
 

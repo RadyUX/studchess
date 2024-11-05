@@ -8,6 +8,7 @@ import {Toaster} from "sonner"
 import ReactQueryProvider from "@/utils/QueryProvider";
 
 import { ModalProvider } from "./(main)/_components/providers/modals-provider";
+import { EdgeStoreProvider } from '../lib/edgestore';
 
 export const metadata: Metadata = {
 
@@ -33,6 +34,7 @@ export default async function RootLayout({
   return (
      <html lang="en" suppressHydrationWarning>
       <ReactQueryProvider>
+        <EdgeStoreProvider>
         <SessionProvider session={session}>
           <body className="h-full bg-[#2E2E2E] text-white">
             <Toaster position="bottom-center" />
@@ -40,6 +42,7 @@ export default async function RootLayout({
             {children}
           </body>
         </SessionProvider>
+        </EdgeStoreProvider>
         </ReactQueryProvider>
     </html>
   );
