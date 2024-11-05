@@ -39,6 +39,7 @@ const ConverImageModal = () => {
         },
          onSuccess: (updatedData) => {
             console.log("Titre mis à jour avec succès :", updatedData); 
+            window.location.reload()
          },
       });
 
@@ -73,7 +74,7 @@ let res
           update.mutate({id: params.id, coverImage: res.url})
 
             onClose()
-            window.location.reload()
+          
         }
     }
 

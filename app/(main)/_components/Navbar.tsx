@@ -1,12 +1,13 @@
 "use client"
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { MenuIcon } from "lucide-react";
 import { Title } from "@radix-ui/react-dialog";
 import TitleX from "./Title";
 import Banner from "./Banner";
 import { Menu } from "./Menu";
+import { Button } from "@/components/ui/button";
 
 
 
@@ -33,7 +34,7 @@ export const fetchDocumentId = async (documentId) => {
   
 const Navbar = ({isCollapsed, onResetWidth}) => {
     const params = useParams();
-
+    const router = useRouter()
     const { data: doc, error, isLoading } = useQuery({
       queryKey: ["document", params.id],
       queryFn: () => fetchDocumentId(params.id), // Utilisez `params.id` ici
@@ -54,7 +55,7 @@ const Navbar = ({isCollapsed, onResetWidth}) => {
         <div className="flex items-center justify-between w-full">
           {doc ? <TitleX initialData={doc} /> : <p>Chargement...</p>}
         </div>
-       
+       <Button variant="white" onClick={()=>{router.push('/')}}>Home</Button>
       
       </nav>
       {doc.isArchived && (

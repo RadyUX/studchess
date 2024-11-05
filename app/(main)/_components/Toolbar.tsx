@@ -109,7 +109,7 @@ const coverImage = useCoverImage()
           </IconPicker>
           <Button
             onClick={onRemoveIcon}
-            className="rounded-full  group-hover/icon:opacity-100 transition text-xs"
+            className="rounded-full opacity-0 hover:opacity-100"
             variant="outline"
             size="icon"
           >
@@ -148,7 +148,7 @@ const coverImage = useCoverImage()
           onKeyDown={onKeyDown}
           value={value}
           onChange={(e) => onInput(e.target.value)}
-          className="text-5xl bg-transparent font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF] resize-none"
+          className="text-5xl bg-transparent font-bold break-words outline-none text-white resize-none"
         />
       ) : (
         <div

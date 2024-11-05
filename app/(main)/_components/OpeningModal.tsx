@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import ChessGame from './ChessBoard';
 import { Button } from '@/components/ui/button';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ConfirmModal } from './ConfirmDialog';
 import { Trash } from 'lucide-react';
 
@@ -51,8 +51,9 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
     };
 
 
+
     const onDelete = (varitantId) =>{
-        console.log("delete document")
+        console.log("delete variation")
     }
     const handleAddVariant = () =>{
         setAddVariant(true)
