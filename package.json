@@ -11,6 +11,9 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^3.7.2",
     "@auth/prisma-adapter": "^2.7.2",
+    "@blocknote/core": "^0.18.0",
+    "@blocknote/mantine": "^0.18.1",
+    "@blocknote/react": "^0.18.1",
     "@edgestore/react": "^0.2.2",
     "@edgestore/server": "^0.2.2",
     "@prisma/client": "^5.21.1",
