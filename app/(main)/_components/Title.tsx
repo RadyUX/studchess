@@ -28,7 +28,7 @@ const TitleX = ({initialData}: TitleProps) => {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(newTitle),
+            body: JSON.stringify({title: newTitle}),
           });
     
           if (!response.ok) {

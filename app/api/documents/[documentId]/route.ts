@@ -30,7 +30,7 @@ export async function GET(request: Request, { params }: { params: { documentId: 
     }
 
     // Vérifier si le document appartient à l'utilisateur et n'est pas archivé
-    if (document.userId !== userId || document.isArchived) {
+    if (document.userId !== userId ) {
       return new NextResponse("Unauthorized", { status: 403 });
     }
 

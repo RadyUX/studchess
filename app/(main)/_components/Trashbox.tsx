@@ -32,7 +32,7 @@ export const fetchArchivedDocument = async () => {
   };
 
   
-  const restoreDocument = async ({ documentId}: { documentId: ObjectId }) => {
+  export const restoreDocument = async ({ documentId}: { documentId: ObjectId }) => {
     const response = await fetch("/api/archivedDocuments", {
       method: "PATCH",
       headers: {
@@ -48,7 +48,7 @@ export const fetchArchivedDocument = async () => {
     }
     return response.json();
   }
-  const deleteDocument = async({ documentId}: { documentId: ObjectId }) =>{
+  export const deleteDocument = async({ documentId}: { documentId: ObjectId }) =>{
     const response = await fetch("/api/archivedDocuments", {
       method: "DELETE",
       headers: {
@@ -103,6 +103,9 @@ const { mutateAsync: restore } = useMutation({
       },
     });
 
+    const onClick = (documentId: string) => {
+      router.push(`/main/${documentId}`);
+    };
   
       
      // Gérer l'état de chargement
@@ -154,9 +157,9 @@ const { mutateAsync: restore } = useMutation({
      <h2>Documents Archivés</h2>
      {filteredDocuments?.map((document) => (
           <div
-            key={document._id}
+            key={document.id}
             role="button"
-
+            onClick={() => onClick(document.id)}
             className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
           >
             <span className="truncate pl-2">

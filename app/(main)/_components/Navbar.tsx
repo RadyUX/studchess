@@ -1,12 +1,16 @@
+"use client"
+
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { MenuIcon } from "lucide-react";
 import { Title } from "@radix-ui/react-dialog";
 import TitleX from "./Title";
+import Banner from "./Banner";
+import { Menu } from "./Menu";
 
 
 
-const fetchDocumentId = async (documentId) => {
+export const fetchDocumentId = async (documentId) => {
     try {
       const response = await fetch(`/api/documents/${documentId}`, { // Notez l'URL corrigée ici
         method: "GET",
@@ -42,6 +46,7 @@ const Navbar = ({isCollapsed, onResetWidth}) => {
     if (error) return <div>Erreur lors de la récupération du document</div>;
   
     return (
+      <>
       <nav className="bg-transparent px-3 py-2 w-full flex items-center gap-x-3">
         {isCollapsed && (
           <MenuIcon role="button" onClick={onResetWidth} className="h-6 w-6" />
@@ -49,7 +54,13 @@ const Navbar = ({isCollapsed, onResetWidth}) => {
         <div className="flex items-center justify-between w-full">
           {doc ? <TitleX initialData={doc} /> : <p>Chargement...</p>}
         </div>
+       
+      
       </nav>
+      {doc.isArchived && (
+        <Banner documentId={doc.id} />
+        )}
+      </>
     )
 }
  
