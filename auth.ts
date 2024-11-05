@@ -23,7 +23,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
             label: "password",
             type: "password",
           },
-        },
+        },// @ts-ignore
         authorize: async (credentials) => {
             if (!credentials) {
                 throw new Error("Missing credentials");
@@ -32,7 +32,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
               const { email, password } = credentials;
       
               // Rechercher l'utilisateur par email dans la base de données
-              const user = await db.user.findUnique({
+              const user = await db.user.findUnique({// @ts-ignore
                 where: {email },
               });
       

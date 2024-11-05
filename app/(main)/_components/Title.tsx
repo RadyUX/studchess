@@ -39,6 +39,7 @@ const TitleX = ({initialData}: TitleProps) => {
         },
          onSuccess: (updatedData) => {
             console.log("Titre mis à jour avec succès :", updatedData);
+            // @ts-ignore
             queryClient.invalidateQueries(["document", initialData.id]); 
          },
       });

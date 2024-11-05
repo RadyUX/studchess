@@ -116,7 +116,8 @@ archiveDocument("documentId_example", "userId_example");
 const DocumentPage = () => {
 const [isModal, setIsModal] = useState(false)
 const [isPopupOpen, setIsPopupOpen] = useState(false);
-const [selectedOpening, setSelectedOpening] = useState({});
+const [selectedOpening, setSelectedOpening] = useState<{ id: string, name?: string }>({ id: '' });
+
 
 
 const handleOpenPopup = (e) => {
@@ -166,7 +167,7 @@ const sampleVariants = [
   };
 
   
-    const createMutation = useMutation({
+    const createMutation = useMutation<{ title: string }, unknown, { title: string }>({
         mutationFn: async (newDocument) => {
           const response = await fetch("/api/documents", {
             method: "POST",
@@ -182,7 +183,7 @@ const sampleVariants = [
       
           return response.json();
         }, onSuccess: () => {
-          queryClient.invalidateQueries(["documents"]);
+          queryClient.invalidateQueries({ queryKey: ["documents"] });
         },
       });
     

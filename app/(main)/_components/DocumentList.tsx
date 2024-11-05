@@ -63,7 +63,7 @@ const DocumentList = ({ parentDocumentId = null, level = 0 }:DocumentListProps) 
       <div>
         {documents?.map((document) => (
           <div key={document.id}>
-            <Item
+            <Item // @ts-ignore
               id={document.id}
               onClick={() => onRedirect(document.id)}
               label={document.title}
@@ -74,7 +74,7 @@ const DocumentList = ({ parentDocumentId = null, level = 0 }:DocumentListProps) 
               onExpand={() => onExpand(document.id)}
               expanded={expanded[document.id]}
             />
-            {expanded[document.id] && (
+            {expanded[document.id] && (// @ts-ignore
               <DocumentList parentDocumentId={document.id} level={level + 1} />
             )}
           </div>

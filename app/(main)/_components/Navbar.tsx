@@ -6,32 +6,11 @@ import { MenuIcon } from "lucide-react";
 import { Title } from "@radix-ui/react-dialog";
 import TitleX from "./Title";
 import Banner from "./Banner";
-import { Menu } from "./Menu";
 import { Button } from "@/components/ui/button";
+import { fetchDocumentId } from "@/lib/fetchData";
 
 
 
-export const fetchDocumentId = async (documentId) => {
-    try {
-      const response = await fetch(`/api/documents/${documentId}`, { // Notez l'URL corrigée ici
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
-      if (!response.ok) {
-        throw new Error("Failed to fetch document");
-      }
-  
-      const data = await response.json();
-      console.log("Document récupéré :", data);
-      return data;
-    } catch (error) {
-      console.error("Erreur lors de la récupération du document :", error);
-    }
-  }
-  
 const Navbar = ({isCollapsed, onResetWidth}) => {
     const params = useParams();
     const router = useRouter()

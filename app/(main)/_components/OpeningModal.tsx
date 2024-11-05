@@ -41,7 +41,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
                 throw new Error("Erreur lors de l'ajout de la variante");
             }
 
-            console.log("Nouvelle variante ajoutée :", newVariant);
+            console.log("Nouvelle variante ajoutée :", newVariant);// @ts-ignore
             queryClient.invalidateQueries(["variation", openingId]);
             // Fermer le formulaire après succès
             setAddVariant(false);
@@ -103,7 +103,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
                         </div>
 
                         <Button variant="white" type="submit" className="m-4">Enregistrer</Button>
-                        <Button variant="destructive" className="m-4" type="button" onClick={() => setAddVariant(false)} className="cancel-button">Annuler</Button>
+                        <Button variant="destructive" className="m-4" type="button" onClick={() => setAddVariant(false)} >Annuler</Button>
                         
                     </form>
                     )

@@ -15,7 +15,7 @@ import {
     DropdownMenuSeparator
   } from "@/components/ui/dropdown-menu";
 import { useSession } from "next-auth/react";
-import { fetchDocuments } from "./Navigation";
+import { fetchDocuments } from "@/lib/fetchData";
 import { useQuery } from "@tanstack/react-query";
 interface itemProps {
     id?: ObjectId;
@@ -65,7 +65,7 @@ const Item = ({
             return data.id; // Retourne l'ID du document créé
           };
          // Mutation pour créer un nouveau document
-         const { mutateAsync: createUnderDocument, isLoading } = useMutation({
+         const { mutateAsync: createUnderDocument } = useMutation({
             mutationFn: createDocument,
             onError: () => {
               toast.error("Failed to create a new note.");
@@ -122,7 +122,7 @@ const Item = ({
                 toast.error("Failed to archive the document.");
             },
             onSuccess: () => {
-                toast.success("Document archived successfully.");
+                toast.success("Document archived successfully.");// @ts-ignore
                 query.invalidateQueries(["documents"]); // Invalider les requêtes avec le cache "documents"
     
             },
@@ -144,7 +144,7 @@ const Item = ({
           };
 
         const { data: documents = []} = useQuery({
-          queryKey: ["documents"],
+          queryKey: ["documents"],// @ts-ignore
           queryFn: () => fetchDocuments(session.data?.user.id),
         });
           

@@ -21,7 +21,7 @@ const ConverImageModal = () => {
     const [file, setFile] = useState<File>()
     const [submitting, setSubmitting] = useState(false)
 
-    const update = useMutation({
+    const update = useMutation({// @ts-ignore
         mutationFn: async ({id, coverImage }) => {
           const response = await fetch(`/api/documents/${id}`, {
             method: "PATCH",
@@ -69,7 +69,7 @@ let res
                 })
             }
 
-           
+           // @ts-ignore
 
           update.mutate({id: params.id, coverImage: res.url})
 

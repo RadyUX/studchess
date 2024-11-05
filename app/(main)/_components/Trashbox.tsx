@@ -32,7 +32,7 @@ export const fetchArchivedDocument = async () => {
   };
 
   
-  export const restoreDocument = async ({ documentId}: { documentId: ObjectId }) => {
+  export const restoreDocument = async ({ documentId}: { documentId: string}) => {
     const response = await fetch("/api/archivedDocuments", {
       method: "PATCH",
       headers: {
@@ -48,7 +48,7 @@ export const fetchArchivedDocument = async () => {
     }
     return response.json();
   }
-  export const deleteDocument = async({ documentId}: { documentId: ObjectId }) =>{
+  export const deleteDocument = async({ documentId}: { documentId:string}) =>{
     const response = await fetch("/api/archivedDocuments", {
       method: "DELETE",
       headers: {
@@ -87,7 +87,9 @@ const { mutateAsync: restore } = useMutation({
     },
     onSuccess: () => {
       toast.success("Document restored successfully.");
+      // @ts-ignore
       queryClient.invalidateQueries(["archived"]); 
+      // @ts-ignore
       queryClient.invalidateQueries(["documents"]); // Invalider les requêtes avec le cache "archived" pour mettre à jour les données
     },
   });
@@ -98,7 +100,7 @@ const { mutateAsync: restore } = useMutation({
         toast.error("Failed to delete the document.");
       },
       onSuccess: () => {
-        toast.success("Document deleted successfully.");
+        toast.success("Document deleted successfully.");// @ts-ignore
         queryClient.invalidateQueries(["archived"]); 
       },
     });

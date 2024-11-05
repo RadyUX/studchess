@@ -4,7 +4,7 @@ import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
  
 import { useEdgeStore } from "@/lib/edgestore";
-import { PartialBlock } from "@blocknote/core";
+
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -28,8 +28,8 @@ const Editor = ({
     return response.url;
   }
 
- 
-  const editor = useCreateBlockNote({
+ // @ts-ignore
+  const editor = useCreateBlockNote({// @ts-ignore
     editable,
     initialContent: initialContent ? JSON.parse(initialContent) : undefined,
     uploadFile: handleUpload

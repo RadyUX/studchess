@@ -65,3 +65,11 @@ export  const fetchUserRepertory = async (userId: string | null) => {
     console.log(fens); // Affiche tous les FEN dans la console
     return fens;
 };
+
+export const fetchDocuments = async () => {
+    const response = await fetch("/api/documents");
+    if (!response.ok) {
+      throw new Error("Failed to fetch documents");
+    }
+    return response.json();
+  };

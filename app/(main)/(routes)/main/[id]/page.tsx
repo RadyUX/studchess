@@ -25,7 +25,7 @@ const DocumentPage = ({ params }: DocumentIdPageProps) => {
   });
 
   const update = useMutation({
-    mutationFn: async ({ id, content }) => {
+    mutationFn: async ({ id, content }: any) => {
       const response = await fetch(`/api/documents/${id}`, {
         method: "PATCH",
         headers: {
@@ -43,10 +43,11 @@ const DocumentPage = ({ params }: DocumentIdPageProps) => {
      onSuccess: (updatedData) => {
         console.log("CONTENT UPDATED:", updatedData);
           // Met à jour le cache immédiatement après la mutation
-        queryClient.setQueryData(["document", params.id], (oldData) => ({
+          queryClient.setQueryData(["document", params.id], (oldData: { content?: string } | undefined) => ({
             ...oldData,
             content: updatedData.content,
           }));
+          
      },
   });
 

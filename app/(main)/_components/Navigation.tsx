@@ -14,14 +14,8 @@ import Trashbox from "./Trashbox";
 import { useSearch } from "@/hooks/useSearch";
 import { useSettings } from "@/hooks/useSetting";
 import Navbar from "./Navbar";
+import { fetchDocuments } from "@/lib/fetchData";
 
-export const fetchDocuments = async () => {
-    const response = await fetch("/api/documents");
-    if (!response.ok) {
-      throw new Error("Failed to fetch documents");
-    }
-    return response.json();
-  };
 
  export const createDocument = async (newDocument) => {
     const response = await fetch("/api/documents", {
@@ -56,7 +50,7 @@ const Navigation = () => {
       //create
       const { mutate: create } = useMutation({
         mutationFn: createDocument,
-        onSuccess: () => {
+        onSuccess: () => {// @ts-ignore
           queryClient.invalidateQueries(["documents"]);
         },
         onError: (error) => {

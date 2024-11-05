@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { db } from "@/db"; // Assurez-vous que db est correctement importé
 
 
-export const removeCover = async (documentId) =>{
+export const removeCover = async (documentId: string) =>{
     try {
         const session = await auth();
         if (!session) {
@@ -30,7 +30,7 @@ export const removeCover = async (documentId) =>{
       }
 
 }
-export const removeIcon = async (documentId) => {
+export const removeIcon = async (documentId: string) => {
   try {
     const session = await auth();
     if (!session) {

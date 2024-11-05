@@ -1,29 +1,39 @@
-import { useEffect, useState } from "react";
+
 import { useQuery } from "@tanstack/react-query";
-import { db } from "@/db";
+
 import CardsOpening from "./CardsOpening";
-import { Button } from "@/components/ui/button";
+
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
-import { fetchOpeningVariations, fetchUserRepertory } from "../(routes)/main/page";
-import { error } from "console";
+import { fetchOpening } from "@/lib/fetchData";
+import { fetchUserRepertory } from "@/lib/fetchData";
 
-const fetchOpening = async () => {
-  console.log("Appel à fetchOpening");  // Tracez le point d'entrée
-  try {
-      const response = await fetch('/api/opening');
-      if (!response.ok) {
-          throw new Error(`Erreur HTTP ! Statut : ${response.status}`);
-      }
-      const data = await response.json();
-      console.log("Données récupérées par fetchOpening :", data);
-      return data;
-  } catch (error) {
-      console.error("Erreur dans fetchOpening :", error);
-      throw error;  // Relancez l'erreur pour que `useQuery` la capte
-  }
+
+
+const fetchOpeningVariations = async (openingId: string | undefined) => {
+  console.log("opening id", openingId)
+ try {
+   const response = await fetch(`/api/variation?openingId=${openingId}`, {
+     method: "GET",
+     headers: {
+       "Content-Type": "application/json",
+     },
+   });
+
+   if (!response.ok) {
+     throw new Error("Failed to fetch opening variations");
+   }
+
+   const data = await response.json();
+   console.log("Variations récupérées :", data);
+   return data;
+ } catch (error) {
+   console.error("Erreur lors de la récupération des variantes :", error);
+ }
 };
+
+
 
 
 
@@ -57,7 +67,7 @@ const OpeningListModal = ({onClose}) => {
     
           return response.json();
         },
-        onSuccess: () => {
+        onSuccess: () => {// @ts-ignore
             queryClient.invalidateQueries(['userRepertory', session?.user.id]);
         },
       });
@@ -65,7 +75,6 @@ const OpeningListModal = ({onClose}) => {
       const { data: openings = [], isLoading, isError } = useQuery({
         queryKey: ["openings"],
         queryFn: () => fetchOpening(),
-        cacheTime: 0,  // Désactive le cache
         staleTime: 0,  
         enabled: true, // Marque les données comme obsolètes immédiatement
         
@@ -104,7 +113,7 @@ const OpeningListModal = ({onClose}) => {
       
 
        
-          
+          // @ts-ignore
         updateRepertory.mutate(updatedRepertory);
 
         

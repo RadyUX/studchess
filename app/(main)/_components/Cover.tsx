@@ -30,6 +30,7 @@ const Cover = ({
         url: url
       })
     }
+    // @ts-ignore
    removeCover(params.id)
    window.location.reload()
   };

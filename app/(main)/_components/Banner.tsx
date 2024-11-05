@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ConfirmModal } from "./ConfirmDialog";
 
 interface BannerProps {
-    documentId: Document | string; // Assurez-vous que documentId soit une chaîne ou un Document
+    documentId: string; // Assurez-vous que documentId soit une chaîne ou un Document
 }
 
 const Banner = ({ documentId }: BannerProps) => {
@@ -22,8 +22,8 @@ const Banner = ({ documentId }: BannerProps) => {
         },
         onSuccess: () => {
             toast.success("Document restored successfully.");
-            queryClient.invalidateQueries(["archived"]);
-            queryClient.invalidateQueries(["documents"]);
+            queryClient.invalidateQueries({queryKey: ["archived"]});
+            queryClient.invalidateQueries({ queryKey: ["documents"] });
         },
     });
 
@@ -34,7 +34,7 @@ const Banner = ({ documentId }: BannerProps) => {
         },
         onSuccess: () => {
             toast.success("Document deleted successfully.");
-            queryClient.invalidateQueries(["archived"]);
+            queryClient.invalidateQueries({queryKey: ["archived"]});
         },
     });
 
