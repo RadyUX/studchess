@@ -5,20 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 
 
-export const fetchFen = async (chesscomusername: string) => {
-    const url = `https://api.chess.com/pub/player/${chesscomusername}/games`; // Corrige l'URL ici
-    const data = await fetch(url);
-  
-    if (!data.ok) {
-      console.error("Failed to fetch Chess.com FEN", data.status);
-      return null;
-    }
-
-    const responseData = await data.json();
-    const fens = responseData.games.map(game => game.fen); // Extrait le FEN de chaque jeu
-    console.log(fens); // Affiche tous les FEN dans la console
-    return fens;
-};
+ 
 
 
 export default function ChessGame({ initialFen = 'start' }) {
