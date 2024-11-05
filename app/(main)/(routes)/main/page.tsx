@@ -86,7 +86,7 @@ const fetchDocuments = async (userId: string | null) => {
 
 
 
-export const fetchUserRepertory = async (userId: string | null) => {
+ const fetchUserRepertory = async (userId: string | null) => {
   if (!userId) {
     throw new Error("User not authenticated");
   }
