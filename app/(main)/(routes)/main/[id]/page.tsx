@@ -2,7 +2,7 @@
 
 import Cover from "@/app/(main)/_components/Cover";
 import Editor from "@/app/(main)/_components/Editor";
-import { fetchDocumentId } from "@/app/(main)/_components/Navbar";
+import { fetchDocumentId } from "@/lib/fetchData";
 import Toolbar from "@/app/(main)/_components/Toolbar";
 import { Document } from "@prisma/client";
 import { useQuery , useMutation, useQueryClient} from "@tanstack/react-query";

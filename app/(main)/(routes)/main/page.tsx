@@ -8,13 +8,14 @@ import { toast } from "sonner";
 import CardsElo from "../../_components/CardsElo";
 import CardsOpening from "../../_components/CardsOpening";
 import { useState } from "react";
-
-import Chessboard, { fetchFen } from "../../_components/ChessBoard";
+import { fetchFen } from "@/lib/fetchData";
+import Chessboard from "../../_components/ChessBoard";
 import Link from "next/link";
-import OpeningListModal, { fetchOpening } from "../../_components/OpeningListModal";
+import OpeningListModal from "../../_components/OpeningListModal";
 import OpeningPopup from "../../_components/OpeningModal";
-
+import { fetchOpening } from "@/lib/fetchData";
 import {ObjectId} from "bson"
+import { fetchUserRepertory } from "@/lib/fetchData";
 // fetch variante
 // Fonction pour fetch les variations d'une ouverture donnée
 const fetchOpeningVariations = async (openingId: string | undefined) => {
@@ -42,7 +43,7 @@ const fetchOpeningVariations = async (openingId: string | undefined) => {
 
 
 //fetch user documents
-const fetchDocuments = async (userId: string | null) => {
+const fetchDocuments = async (userId: string | undefined) => {
   if (!userId) {
     throw new Error("User not authenticated");
   }
@@ -56,7 +57,7 @@ const fetchDocuments = async (userId: string | null) => {
 };
 
  //fetch user elo
- const fetchChessRating = async (chesscomusername) => {
+ const fetchChessRating = async (chesscomusername: string) => {
   console.log("Fetching rating for username:", chesscomusername); // Log pour vérifier le username
   if (!chesscomusername) {
     throw new Error("No Chess.com username provided");
@@ -86,21 +87,9 @@ const fetchDocuments = async (userId: string | null) => {
 
 
 
- const fetchUserRepertory = async (userId: string | null) => {
-  if (!userId) {
-    throw new Error("User not authenticated");
-  }
-
-  const response = await fetch(`/api/repertory`);
-  if (!response.ok) {
-    throw new Error("Failed the repertoire");
-  }
-
-  return response.json();
-}
 
 
-const archiveDocument = async (documentId, userId) => {
+const archiveDocument = async (documentId: string, userId: string) => {
   try {
     const response = await fetch("/api/documents/archive", {
       method: "POST",
