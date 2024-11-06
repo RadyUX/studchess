@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Chess } from 'chess.js'; // import Chess from "chess.js" (default) if receiving an error about new Chess() not being a constructor
-import Chessboard from 'chessboardjsx';
+
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
-
+import dynamic from 'next/dynamic';
 
  
-
+const Chessboard = dynamic(() => import('chessboardjsx'), { ssr: false });
 
 export default function ChessGame({ initialFen = 'start' }) {
     
-    const [chess, setChess] = useState(new Chess()); // Instancie un nouvel objet Chess
+    const [chess, setChess] = useState(null); // Instancie un nouvel objet Chess
     const [fen, setFen] = useState(initialFen); // État pour suivre la position actuelle de l'échiquie
     
     
-   
+    useEffect(() => {
+      if (typeof window !== 'undefined') {
+        setChess(new Chess());
+      }
+    }, []);
+  
 
     
 
