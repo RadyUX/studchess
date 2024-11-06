@@ -5,7 +5,7 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { cn } from "@/lib/utils";
 import { ImageIcon, X } from "lucide-react";
 import Image from "next/image";
-import { useParams } from "next/navigation";
+import { useParams , useRouter} from "next/navigation";
 
 interface CoverImageProps {
     url?: string;
@@ -20,6 +20,7 @@ const Cover = ({
   }: CoverImageProps) => {
     const {edgestore} = useEdgeStore()
     const params = useParams()
+    const router = useRouter()
     const coverImage = useCoverImage()
     
 
@@ -32,7 +33,7 @@ const Cover = ({
     }
     // @ts-ignore
    removeCover(params.id)
-   window.location.reload()
+   router.refresh()
   };
     return (  
         <div className={cn(

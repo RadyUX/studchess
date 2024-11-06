@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import TextareaAutosize from "react-textarea-autosize"
 import { removeIcon } from "@/actions/icon";
 import { useCoverImage } from "@/hooks/useCouverImage";
+import { useRouter } from "next/navigation";
 
 interface ToolbarProps {
   initialData: Document;
@@ -21,6 +22,7 @@ const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     const [isEditing, setIsEditing] = useState(false)
     const [value, setValue] = useState(initialData.title)
    const queryClient = useQueryClient()
+   const router = useRouter()
 const coverImage = useCoverImage()
     const update = useMutation({// @ts-ignore
         mutationFn: async ({  title, icon }) => {
@@ -89,7 +91,7 @@ const coverImage = useCoverImage()
 
   const onRemoveIcon = () =>{
     removeIcon(initialData.id)
-    window.location.reload()
+   router.refresh()
   }
  
 

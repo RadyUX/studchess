@@ -10,11 +10,13 @@ import { useCoverImage } from "@/hooks/useCouverImage";
 import { SingleImageDropzone } from "@/components/ui/dropzone";
 import { useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
+
 
 const ConverImageModal = () => {
     const params = useParams()
+    const router = useRouter()
     const coverImage = useCoverImage()
     const { edgestore } = useEdgeStore()
 
@@ -39,7 +41,7 @@ const ConverImageModal = () => {
         },
          onSuccess: (updatedData) => {
             console.log("Titre mis à jour avec succès :", updatedData); 
-            window.location.reload()
+           router.refresh()
          },
       });
 
