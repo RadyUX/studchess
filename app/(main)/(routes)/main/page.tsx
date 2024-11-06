@@ -244,7 +244,7 @@ const sampleVariants = [
     
     
     return ( 
-      <div className="h-full ml-28 flex flex-col items-center justify-center space-y-4">
+      <div className="h-full ml-4 md:ml-28 flex flex-col items-center justify-center space-y-4">
       <h2 className="text-2xl font-medium p-6">
         {session?.user.chesscomUsername}'s Chess Tracker ! 
       </h2>
@@ -257,7 +257,7 @@ const sampleVariants = [
       <div className="flex flex-col w-full">
         <div className="mt-6 mb-6">
           <h1 className="text-4xl font-semibold mb-4">Objectif</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2  lg:grid-cols-3 gap-6">
             <CardsElo title="Objectif Bullet 🔥" elo={ratings.bullet} eloObjectif={session?.user.eloBullet}/>
             <CardsElo title="Objectif Blitz ⚡ " elo={ratings.blitz} eloObjectif={session?.user.eloBlitz}/>
             <CardsElo title="Objectif Rapid ⏰" elo={ratings.rapid} eloObjectif={session?.user.eloRapid}/>
@@ -280,7 +280,8 @@ const sampleVariants = [
           <h1 className="text-4xl font-semibold mb-4">My Repertoire  <Button variant="white" onClick={handleModal}>
           <PlusCircle className="h-4 w-4 mr-2" /> Add Opening
         </Button></h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+          <div className="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center ">
+          
           {openings.length > 0 ? (
               openings.map((opening) => (
                 <CardsOpening
@@ -299,7 +300,7 @@ const sampleVariants = [
         </div>
         <div className="mt-6 mb-6">
           <h1 className="text-4xl font-semibold mb-4">My Games</h1>
-          <div className="flex gap-20">
+          <div className="flex gap-20 flex-col md:flex-row">
           {isLoadingFens ? (
               <p>Loading games...</p>
             ) : errorFens ? (

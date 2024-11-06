@@ -60,7 +60,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
     }
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 ">
-            <div className="bg-[#2E2E2E] p-6  rounded-lg shadow-lg w-[1000x]">
+            <div className="bg-[#2E2E2E] p-6  rounded-lg shadow-lg w-[1000x] ">
                 {/* Titre de l'ouverture */}
                 <h2 className="text-2xl font-bold text-center mb-4">{title}</h2>
                    {/* Bouton Ajouter une Nouvelle Variante */}
@@ -71,7 +71,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
                     + Nouvelle Variante
                 </button>
 
-<div className='flex justify-around space-x-5'>
+<div className='flex flex-col md:flex-row justify-around space-x-5'>
              
                 {/* Liste des Variantes */}
                 <div className="space-y-4">
@@ -129,8 +129,9 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
                     </div>
                 </div>
                
-               
+  <div className='hidden md:block'>        
 <ChessGame/>
+</div>     
 </div>
                 {/* Bouton de fermeture */}
                 <button 

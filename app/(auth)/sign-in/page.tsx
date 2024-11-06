@@ -59,9 +59,9 @@ const SignIn = () => {
         }
       };
     return ( 
-        <div className="w-full flex mt-20 justify-center">
-            <section className="flex flex-col w-[400px]">
-                <h1>Sign in</h1>
+        <div className="w-full flex mt-20 items-center justify-center">
+            <section className="flex flex-col w-[400px] items-center justify-center">
+                <h1 className="text-center text-3xl mb-6">Sign in</h1>
                 {error && (
                     <div className="text-red-500 mb-4">
                         {error === 'CredentialsSignin' ? "Email ou mot de passe incorrect." : "Une erreur s'est produite."}
@@ -73,9 +73,9 @@ const SignIn = () => {
                     </div>
                 )}
                 <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-                    <div><label >email</label><input type="email" placeholder="email" id="email" name='email' /></div>
-                    <div><label >password</label><input type="password" placeholder="password" id="password" name="password"/></div>
-                    <div>
+                    <div  className="flex flex-col"><label className="text-sm font-medium mb-2" >email</label><input type="email" placeholder="email" id="email" name='email'    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500" /></div>
+                    <div  className="flex flex-col"><label className="text-sm font-medium mb-2">password</label><input type="password" placeholder="password" id="password" name="password"    className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"/></div>
+                    <div className="mt-4">
                         <AuthButton/>
                     </div>
                    

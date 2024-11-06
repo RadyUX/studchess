@@ -9,7 +9,7 @@ const Heroes = () => {
             <div className="relative w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] md:h-[400px] md:w-[400px]">
                 <Image src='/chess.png' fill className="object-contain" alt="chess" />
             </div>
-            <div className="flex justify-between gap-16">
+            <div className="flex flex-col md:flex-row justify-between gap-16">
                 <h1 className="font-bold text-xl">📃 Write Your Own Analysis</h1>
                 <h1 className="font-bold text-xl">🔨 Build Your Repertoire</h1>
                 <h1 className="font-bold text-xl">🔥 Follow Your Progress</h1>

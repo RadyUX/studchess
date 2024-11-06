@@ -12,14 +12,27 @@ export default function ChessGame({ initialFen = 'start' }) {
     
     const [chess, setChess] = useState(null); // Instancie un nouvel objet Chess
     const [fen, setFen] = useState(initialFen); // État pour suivre la position actuelle de l'échiquie
-    
+    const [boardWidth, setBoardWidth] = useState(500)
     
     useEffect(() => {
       if (typeof window !== 'undefined') {
         setChess(new Chess());
       }
     }, []);
+
+    useEffect(() => {
+      const updateBoardWidth = () => {
+        // Définit la largeur comme 90% de la largeur de l'écran, jusqu'à une taille maximale (ex. : 500px)
+        setBoardWidth(Math.min(window.innerWidth * 0.9, 500));
+      };
   
+      // Met à jour la largeur au chargement de la page et lors du redimensionnement
+      updateBoardWidth();
+      window.addEventListener('resize', updateBoardWidth);
+  
+      // Nettoie l'événement lorsque le composant est démonté
+      return () => window.removeEventListener('resize', updateBoardWidth);
+    }, []);
 
     
 
@@ -58,7 +71,7 @@ export default function ChessGame({ initialFen = 'start' }) {
   return (
     <div>
       <Chessboard
-        width={500}
+        width={boardWidth}
         position={fen} // Position actuelle de l'échiquier
         onDrop={onDrop} // Appelle la fonction onDrop lorsqu'un coup est joué
       />
