@@ -280,7 +280,7 @@ const sampleVariants = [
           <h1 className="text-4xl font-semibold mb-4">My Repertoire  <Button variant="white" onClick={handleModal}>
           <PlusCircle className="h-4 w-4 mr-2" /> Add Opening
         </Button></h1>
-          <div className="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center ">
+          <div className="grid justify-items-center md:justify-items-start grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center ">
           
           {openings.length > 0 ? (
               openings.map((opening) => (
