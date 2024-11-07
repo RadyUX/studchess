@@ -59,21 +59,22 @@ export async function POST(request) {
   }
 
   try {
-    // Extraction des données du body
-    const body = await request.json(); // Récupérer le JSON du body de la requête
+
+    const body = await request.json(); 
     const { notes, moves, openingId } = body;
 
-    // Validation des données reçues
+   
     if (!notes || !moves || !openingId) {
       return new NextResponse("Missing fields", { status: 400 });
     }
 
-    // Création de la variation dans la base de données
-    const variation = await db.variation.create({
+
+     const variation = await db.variation.create({
       data: {
         notes,
         moves,
         openingId,
+        userId: session.user.id, 
       },
     });
 
@@ -87,6 +88,7 @@ export async function POST(request) {
 
 export async function GET(request: Request) {
   try {
+    const session = await auth()
     const { searchParams } = new URL(request.url);
     const openingId = searchParams.get("openingId");
 
@@ -98,6 +100,7 @@ export async function GET(request: Request) {
     const variations = await db.variation.findMany({
       where: {
         openingId: openingId,
+        userId: session.user.id, 
       },
     });
 

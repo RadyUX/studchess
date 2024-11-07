@@ -56,3 +56,29 @@ export const removeIcon = async (documentId: string) => {
     throw new Error("Erreur lors de la suppression de l'icône");
   }
 };
+
+
+export const removeVariation = async (vairationId: string) => {
+  try {
+    const session = await auth();
+    if (!session) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = session.user.id; // Vérifiez que l'utilisateur est propriétaire du document
+
+    // Mettez le champ icon à null pour supprimer l'icône
+    const updatedOpening = await db.variation.delete({
+      where: {
+        id: vairationId, // Utilisez le champ `id` pour identifier le document
+        userId: userId, // Assurez-vous que seul le propriétaire peut modifier
+      },
+     
+    });
+
+    return updatedOpening
+  } catch (error) {
+    console.error("Erreur lors de la suppression de la vatiante :", error);
+    throw new Error("Erreur lors de la suppression de la vatiante");
+  }
+};

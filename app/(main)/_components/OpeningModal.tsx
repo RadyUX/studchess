@@ -5,12 +5,16 @@ import ChessGame from './ChessBoard';
 import { Button } from '@/components/ui/button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ConfirmModal } from './ConfirmDialog';
-import { Trash } from 'lucide-react';
+import { Trash, X } from 'lucide-react';
+import { removeVariation } from '@/actions/icon';
+import { useRouter } from 'next/navigation';
+
 
 
 
 const OpeningPopup = ({ title, openingId, variants, onClose }) => {
     const [addVariant, setAddVariant] = useState(false)
+    const router = useRouter()
     const queryClient = useQueryClient()
 
     const handleAddNewVariation = async (event) => {
@@ -41,7 +45,8 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
                 throw new Error("Erreur lors de l'ajout de la variante");
             }
 
-            console.log("Nouvelle variante ajoutée :", newVariant);// @ts-ignore
+            console.log("Nouvelle variante ajoutée :", newVariant);
+            // @ts-expect-error xxxdxds
             queryClient.invalidateQueries(["variation", openingId]);
             // Fermer le formulaire après succès
             setAddVariant(false);
@@ -50,20 +55,53 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
         }
     };
 
+ 
 
+
+    const deleteOpening = useMutation({
+        mutationFn: async(openingId) =>{
+            const response = await fetch("/api/opening", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ openingId }),
+            })
+
+            if (!response.ok) {
+                throw new Error("Failed to delete opening");
+            }
+            return response.json();
+        },
+        onSuccess: (data, variables) => {
+          console.log("Opening deleted:", data);
+          // Mettez à jour le cache si nécessaire
+    queryClient.invalidateQueries({queryKey: ['repertory']})
+        },
+    })
+    const onDeleteOpening = (openingId) => {
+        deleteOpening.mutate(openingId);
+       router.push('/')
+    }
 
     const onDelete = (varitantId) =>{
-        console.log("delete variation")
+       removeVariation(varitantId)
+        router.push('/')
     }
     const handleAddVariant = () =>{
         setAddVariant(true)
     }
+
+    
     return (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-50 ">
             <div className="bg-[#2E2E2E] p-6  rounded-lg shadow-lg w-[1000x] ">
-                {/* Titre de l'ouverture */}
+               <div className='flex justify-center '>
                 <h2 className="text-2xl font-bold text-center mb-4">{title}</h2>
-                   {/* Bouton Ajouter une Nouvelle Variante */}
+                <ConfirmModal onConfirm={() => onDeleteOpening(openingId)}>
+                <Button className='bg-transparent'><X/></Button>
+               </ConfirmModal>
+                </div>
                    <button 
                     onClick={handleAddVariant} 
                     className="w-full border-2 border-gray-400 p-2 rounded-lg mb-6 text-gray-600 hover:bg-gray-100"
@@ -133,7 +171,7 @@ const OpeningPopup = ({ title, openingId, variants, onClose }) => {
 <ChessGame/>
 </div>     
 </div>
-                {/* Bouton de fermeture */}
+              
                 <button 
                     onClick={onClose} 
                     className="mt-6 w-full bg-red-500 text-white p-2 rounded-lg hover:bg-red-600"
